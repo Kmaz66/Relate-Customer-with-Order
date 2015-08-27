@@ -39,21 +39,23 @@ class EasyMart_CustomerRelateOrder_Block_Adminhtml_Customer_Edit_Tabs_Relate ext
 
     protected function _prepareCollection()
     {
-        $collection = Mage::getResourceModel('sales/order_grid_collection')
-            ->addFieldToSelect('entity_id')
+        $collection = Mage::getModel('sales/order')->getCollection()
+            //->addFieldToSelect('*')
+			->addFieldToSelect('entity_id')
             ->addFieldToSelect('increment_id')
             ->addFieldToSelect('customer_id')
             ->addFieldToSelect('created_at')
             ->addFieldToSelect('grand_total')
             ->addFieldToSelect('order_currency_code')
             ->addFieldToSelect('store_id')
-            ->addFieldToSelect('billing_name')
-            ->addFieldToSelect('shipping_name')
-            ->join(array(
-                'order' => 'sales/order'), 'main_table.entity_id = order.entity_id', array('order.customer_email'))
+            ->addFieldToSelect('customer_firstname')
+            ->addFieldToSelect('customer_lastname')
+            
+            
             ->addFieldToFilter('customer_email', Mage::registry('current_customer')->getEmail())
             ->addFieldToFilter('customer_id', array('null' => true))
-            ->setIsCustomerMode(true);
+            //->setIsCustomerMode(true)
+			;
 
         $this->setCollection($collection);
         //echo $this->getCollection()->getSelect();
@@ -75,15 +77,16 @@ class EasyMart_CustomerRelateOrder_Block_Adminhtml_Customer_Edit_Tabs_Relate ext
             'type'      => 'datetime',
         ));
 
-        /*$this->addColumn('shipping_firstname', array(
-            'header'    => Mage::helper('customer')->__('Shipped to First Name'),
-            'index'     => 'shipping_firstname',
+        $this->addColumn('customer_firstname', array(
+            'header'    => Mage::helper('relate_order')->__('Customer First Name'),
+            'index'     => 'customer_firstname',
         ));
 
-        $this->addColumn('shipping_lastname', array(
-            'header'    => Mage::helper('customer')->__('Shipped to Last Name'),
-            'index'     => 'shipping_lastname',
-        ));*/
+        $this->addColumn('customer_lastname', array(
+            'header'    => Mage::helper('relate_order')->__('Customer Last Name'),
+            'index'     => 'customer_lastname',
+        ));/**/
+		/*
         $this->addColumn('billing_name', array(
             'header'    => Mage::helper('relate_order')->__('Bill to Name'),
             'index'     => 'billing_name',
@@ -93,7 +96,7 @@ class EasyMart_CustomerRelateOrder_Block_Adminhtml_Customer_Edit_Tabs_Relate ext
             'header'    => Mage::helper('relate_order')->__('Shipped to Name'),
             'index'     => 'shipping_name',
         ));
-
+*/
         $this->addColumn('grand_total', array(
             'header'    => Mage::helper('relate_order')->__('Order Total'),
             'index'     => 'grand_total',
